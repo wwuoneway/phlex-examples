@@ -11,7 +11,7 @@ namespace simb
 namespace examples
 {
   //Algorithm that prints the contents of simb::MCParticles and returns the number of MCParticles in this data cell.
-  int print_mcparticles(std::vector<simb::MCParticle> const& particles);
+  std::vector<simb::MCParticle> print_mcparticles(std::vector<simb::MCParticle> const& particles);
 }
 
 #endif //PRINT_MCPARTICLES_HPP

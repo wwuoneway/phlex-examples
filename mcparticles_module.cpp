@@ -10,5 +10,5 @@ PHLEX_REGISTER_ALGORITHMS(m, config)
 
   m.transform("print_mcparticles", examples::print_mcparticles)
     .input_family("largeant"_in(layer))
-    .output_products("n_mcparticles");
+    .output_products("mcparticles");
 }

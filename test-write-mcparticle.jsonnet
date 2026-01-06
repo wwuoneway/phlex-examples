@@ -16,13 +16,9 @@
     },
   },
   modules: {
-    print_mcparticles: {
-      cpp: 'mcparticles_module',
-      layer: 'event',
-    },
     output: {
       cpp: 'form_module',
-      products: ['mcparticles'],
+      products: ['largeant'],
     },
   },
 }

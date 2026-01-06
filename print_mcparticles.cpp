@@ -5,12 +5,12 @@
 
 namespace examples
 {
-  int print_mcparticles(std::vector<simb::MCParticle> const& particles)
+  std::vector<simb::MCParticle> print_mcparticles(std::vector<simb::MCParticle> const& particles)
   {
     std::cout << "[" << std::endl;
     for(auto const& part: particles) std::cout << part << std::endl;
     std::cout << "]" << std::endl;
 
-    return particles.size();
+    return particles;
   }
 } //namespace examples
