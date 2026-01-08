@@ -16,4 +16,7 @@
 
  <class name="std::pair<TLorentzVector, TLorentzVector>"                           />
  <class name="std::vector< std::pair<TLorentzVector, TLorentzVector> >"            />
+
+ <class name="examples::track"      ClassVersion="11"                              />
+ <class name="std::vector<examples::track>"                                        />
 </lcgdict>
