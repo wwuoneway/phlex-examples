@@ -31,6 +31,10 @@ add_library(track_cheater SHARED track_cheater.cpp)
 target_link_options(track_cheater PRIVATE "LINKER:--no-as-needed")
 target_link_libraries(track_cheater PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
 
+add_library(track_cheater_per_tpc SHARED track_cheater_per_tpc.cpp)
+target_link_options(track_cheater_per_tpc PRIVATE "LINKER:--no-as-needed")
+target_link_libraries(track_cheater_per_tpc PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+
 # Register providers for data products
 add_library(ij_source MODULE ij_source.cpp)
 target_link_libraries(ij_source PRIVATE phlex::module)
@@ -46,5 +50,9 @@ add_library(mcparticles_module MODULE mcparticles_module.cpp)
 target_link_libraries(mcparticles_module PRIVATE phlex::module print_mcparticles)
 
 add_library(track_cheater_module MODULE track_cheater_module.cpp)
-target_link_options(track_cheater PRIVATE "LINKER:--no-as-needed")
 target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME})
+
+#TODO: unfold registration seems to be broken because of a missing argument when it delegates to glue<>.
+#add_library(track_cheater_per_tpc_module MODULE track_cheater_per_tpc_module.cpp)
+#target_link_libraries(track_cheater_per_tpc_module PRIVATE phlex::module track_cheater_per_tpc ${FORM_DATA_PROD_LIB_NAME})
+

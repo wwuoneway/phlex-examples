@@ -2,7 +2,7 @@
   driver: {
     cpp: 'generate_layers',
     layers: {
-      event: { parent: 'job', total: 9, starting_number: 0 },
+      event: { parent: 'job', total: 5, starting_number: 0 },
     },
   },
   sources: {
@@ -19,9 +19,12 @@
     track_cheater: {
       cpp: 'track_cheater_module',
     },
+    mcparticle_printer: {
+      cpp: 'mcparticles_module',
+    },
     output: {
       cpp: 'form_module',
-      products: ['cheater_tracks',],
+      products: ['cheater_tracks', 'mcparticles',],
     },
   },
 }
