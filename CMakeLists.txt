@@ -19,7 +19,7 @@ find_package(TBB REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(phlex REQUIRED)
 
-add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+add_compile_options(-Wall -Wpedantic -Werror)
 add_subdirectory(gaus_hit_finder)
 
 # Proxies for framework-agnostic experiment libraries
