@@ -10,7 +10,7 @@
       cpp: 'wire_source',
         layer: 'event',
         art_module: 'tpcrawdecoder',
-        art_label: 'dnnsp',
+        art_label: 'wiener', //'dnnsp',
         art_job: 'detsim',
         art_file_name: '/exp/dune/data/users/aolivier/rntuple/largeProductionFilesForRNTuple/anu_numu2nutau_nue2numu_dunevd10kt_1x8x6_3view_30deg_27401_145_20230813T114229Z_gen_g4_detsim_hitreco__20240407T033234Z_reco2.root.dropDuneProducts.root',
     },

@@ -35,6 +35,7 @@
  <class name="lar::range_t<unsigned long>"/>
  <class name="lar::sparse_vector<float>::datarange_t"/>
  <class name="std::vector< lar::sparse_vector<float>::datarange_t>"/>
+ <class name="lar::sparse_vector<float>"/>
 
  <class name="std::vector<simb::MCParticle>"                                       />
  <class name="std::vector<simb::MCTrajectory>"                                     />
