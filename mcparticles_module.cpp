@@ -9,6 +9,6 @@ PHLEX_REGISTER_ALGORITHMS(m, config)
   auto const layer = "event"; //hard-coded in ART reader source for now
 
   m.transform("print_mcparticles", examples::print_mcparticles)
-    .input_family("largeant"_in(layer))
-    .output_products("mcparticles");
+    .input_family(product_query{.creator = "largeant", .layer = layer})
+    .output_product_suffixes("mcparticles");
 }

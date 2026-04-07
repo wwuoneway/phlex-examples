@@ -61,8 +61,8 @@ add_library(mcparticle_source MODULE mcparticle_source.cpp)
 target_link_libraries(mcparticle_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO)
 
 # Register experiment libraries with Phlex
-add_library(module MODULE module.cpp)
-target_link_libraries(module PRIVATE phlex::module my_add)
+#add_library(module MODULE module.cpp)
+#target_link_libraries(module PRIVATE phlex::module my_add)
 
 add_library(mcparticles_module MODULE mcparticles_module.cpp)
 target_link_libraries(mcparticles_module PRIVATE phlex::module print_mcparticles)
