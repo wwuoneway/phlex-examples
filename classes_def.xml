@@ -11,8 +11,28 @@
   <version ClassVersion="11" checksum="1656038010"/>
  </class>
 
+ <class name="recob::Hit" ClassVersion="17">
+  <version ClassVersion="17" checksum="1259708115"/>
+   <version ClassVersion="16" checksum="3524685965"/>
+   <version ClassVersion="15" checksum="3889929631"/>
+   <version ClassVersion="14" checksum="1206393973"/>
+   <version ClassVersion="13" checksum="2260253886"/>
+ </class>
+
+ <class name="recob::Wire" ClassVersion="19">
+   <version ClassVersion="19" checksum="1560514318"/>
+   <version ClassVersion="18" checksum="2134690102"/>
+   <version ClassVersion="17" checksum="4245857386"/>
+   <version ClassVersion="16" checksum="2920613755"/>
+   <version ClassVersion="15" checksum="1996069203"/>
+   <version ClassVersion="14" checksum="421277707"/>
+   <version ClassVersion="13" checksum="486905015"/>
+ </class>
+
  <class name="std::vector<simb::MCParticle>"                                       />
  <class name="std::vector<simb::MCTrajectory>"                                     />
+ <class name="std::vector<recob::Hit>"                                             />
+ <class name="std::vector<recob::Wire>"                                            />
 
  <class name="std::pair<TLorentzVector, TLorentzVector>"                           />
  <class name="std::vector< std::pair<TLorentzVector, TLorentzVector> >"            />

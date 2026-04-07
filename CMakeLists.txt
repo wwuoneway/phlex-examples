@@ -28,7 +28,7 @@ include_directories(${ROOT_INCLUDE_DIRS})
 
 REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_def.xml)
 
-add_library(${FORM_DATA_PROD_LIB_NAME} SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp)
+add_library(${FORM_DATA_PROD_LIB_NAME} SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp gaus_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx gaus_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
 target_link_libraries(${FORM_DATA_PROD_LIB_NAME} ROOT::Physics ROOT::EG)
 
 add_compile_options(-Wall -Wpedantic -Werror)

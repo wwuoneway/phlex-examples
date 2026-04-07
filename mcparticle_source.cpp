@@ -1,8 +1,9 @@
 #include "phlex/configuration.hpp"
 #include "phlex/model/data_cell_index.hpp"
 #include "phlex/source.hpp"
+#include "MCParticle.h"
 
-#include "read_mcparticles_from_art.cpp"
+#include "read_data_products_from_art.hpp"
 
 using namespace phlex;
 
@@ -27,6 +28,6 @@ PHLEX_REGISTER_PROVIDERS(m, config)
 
   auto const art_file_name = config.get<std::string>("art_file_name");
 
-  auto part_maker = m.make<wrapper<ToyMCAlg>>(art_file_name, "simb::MCParticles_" + art_module + "_" + art_label + "_" + art_job + ".obj");
-  part_maker.provide("read_mcparticles", &wrapper<ToyMCAlg>::phlex_callback).output_product(product_query{.creator = "read_mcparticles", .layer = "event", .suffix = "largeant"});
+  auto part_maker = m.make<wrapper<ArtReader<simb::MCParticle>>>(art_file_name, "simb::MCParticles_" + art_module + "_" + art_label + "_" + art_job + ".obj");
+  part_maker.provide("read_mcparticles", &wrapper<ArtReader<simb::MCParticle>>::phlex_callback).output_product(product_query{.creator = "read_mcparticles", .layer = "event", .suffix = "largeant"});
 }
