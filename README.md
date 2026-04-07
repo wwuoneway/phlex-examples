@@ -7,7 +7,7 @@ This repository contains examples of the use of the [Phlex framework](https://gi
 To use the code in this repository, first install it:
 
 ```console
-git clone https://github.com/Framework-R-D/phlex-examples.git
+git clone -b phlex-v0.1 https://github.com/Framework-R-D/phlex-examples.git
 ```
 
 Now create a build directory:
@@ -20,20 +20,32 @@ The repository can now be easily built by activating [the environment you create
 
 ```console
 spack env activate my-phlex-environment
-spack load cmake
-cmake ../phlex-example
-make -j
+spack load cmake gcc@15  # adjust if you used a different compiler for phlex
+cmake ../phlex-examples
+make -j 12  # choose a suitable number of jobs for your machine
 ```
 
 ## Running the code
+
+### Add your build directory to `PHLEX_PLUGIN_PATH`
+
+```console
+# Make sure you do this from your build directory
+export PHLEX_PLUGIN_PATH=${PWD}:${PHLEX_PLUGIN_PATH}
+```
 
 You should now be able to run a simple `phlex` job:
 
 ### Job with C++ algorithms
 
 ```console
-$ phlex -c ~/phlex-examples/test-cpp-workflow.jsonnet
-Using configuration file: /.../phlex-examples/test-cpp-workflow.jsonnet
+phlex -c ../phlex-examples/test-cpp-workflow.jsonnet
+```
+
+The output should look like:
+
+```console
+Using configuration file: ../phlex-examples/test-cpp-workflow.jsonnet
 [2025-12-22 13:17:51.496] [info] Number of worker threads: 24
 Registering FORM output module...
 Configuration:
@@ -57,9 +69,14 @@ Processed layers:
 To run a job that uses a Python algorithm, the `PYTHONPATH` environment variable must be adjusted to include the directory with the Python module:
 
 ```console
-$ PYTHONPATH=$(realpath ~/phlex-examples):$PYTHONPATH
-$ phlex -c ~/phlex-examples/test-py-workflow.jsonnet
-Using configuration file: /home/knoepfel/phlex-examples/test-py-workflow.jsonnet
+export PYTHONPATH=$(realpath ../phlex-examples):${PYTHONPATH}
+phlex -c ../phlex-examples/test-py-workflow.jsonnet
+```
+
+The output should look like:
+
+```console
+Using configuration file: ../phlex-examples/test-py-workflow.jsonnet
 [2025-12-22 13:50:07.999] [info] Number of worker threads: 24
 [2025-12-22 13:50:08.013] [info]
 Processed layers:
@@ -71,6 +88,8 @@ Processed layers:
 ```
 
 > [!NOTE]
-> For Phlex 0.1.0, Python data products:
+> For Phlex v0.1.0, Python data products:
 > - Cannot be written to output files
 > - Must belong to the `"job"` data layer
+>
+> For Phlex v0.2.0, Python data products cannot be written to output files.

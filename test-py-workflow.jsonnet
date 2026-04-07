@@ -3,15 +3,18 @@
     cpp: 'generate_layers',
   },
   sources: {
-    ij_source: {
-      cpp: 'ij_source',
+    numbers_source: {
+      cpp: 'numbers_source',
       layer: 'job',
     },
   },
   modules: {
     subtract: {
       py: 'subtract',
-      input: ['i', 'j'],
+      input: [
+        { creator: 'input', suffix: 'i', layer: 'job' },
+        { creator: 'input', suffix: 'j', layer: 'job' },
+      ],
       output: ['difference'],
     },
     // Python data products cannot yet be written to output files

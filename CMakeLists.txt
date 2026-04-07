@@ -1,7 +1,18 @@
 cmake_minimum_required(VERSION 3.31)
 project(my_phlex_example VERSION 0.0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "14.1")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "15")
+      add_compile_options(-Wno-stringop-overflow)
+    endif()
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "16")
+      add_compile_options(-Wno-array-bounds)
+    endif()
+  endif()
+endif()
 
 find_package(Boost REQUIRED json)
 find_package(TBB REQUIRED)
@@ -20,9 +31,13 @@ REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_d
 add_library(${FORM_DATA_PROD_LIB_NAME} SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp)
 target_link_libraries(${FORM_DATA_PROD_LIB_NAME} ROOT::Physics ROOT::EG)
 
+add_compile_options(-Wall -Wpedantic -Werror)
+add_subdirectory(gaus_hit_finder)
+
 # Proxies for framework-agnostic experiment libraries
 # N.B. The specified library type should be SHARED.
 add_library(my_add SHARED my_add.cpp)
+add_library(my_geometry SHARED my_geometry.cpp)
 
 add_library(print_mcparticles SHARED print_mcparticles.cpp)
 target_link_libraries(print_mcparticles PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
@@ -36,8 +51,11 @@ target_link_options(track_cheater_per_tpc PRIVATE "LINKER:--no-as-needed")
 target_link_libraries(track_cheater_per_tpc PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
 
 # Register providers for data products
-add_library(ij_source MODULE ij_source.cpp)
-target_link_libraries(ij_source PRIVATE phlex::module)
+add_library(numbers_source MODULE numbers_source.cpp)
+target_link_libraries(numbers_source PRIVATE phlex::module)
+
+add_library(geometry_source MODULE geometry_source.cpp)
+target_link_libraries(geometry_source PRIVATE phlex::module my_geometry)
 
 add_library(mcparticle_source MODULE mcparticle_source.cpp)
 target_link_libraries(mcparticle_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO)
@@ -56,3 +74,9 @@ target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater $
 #add_library(track_cheater_per_tpc_module MODULE track_cheater_per_tpc_module.cpp)
 #target_link_libraries(track_cheater_per_tpc_module PRIVATE phlex::module track_cheater_per_tpc ${FORM_DATA_PROD_LIB_NAME})
 
+add_library(add_and_verify MODULE add_and_verify.cpp)
+target_link_libraries(add_and_verify PRIVATE phlex::module my_add my_geometry)
+
+# Enable asserts for add_and_verify
+# N.B. This should not be done for production code, but it is useful for testing and development.
+target_compile_options(add_and_verify PRIVATE -UNDEBUG)
