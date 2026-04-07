@@ -60,6 +60,9 @@ target_link_libraries(geometry_source PRIVATE phlex::module my_geometry)
 add_library(mcparticle_source MODULE mcparticle_source.cpp)
 target_link_libraries(mcparticle_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO)
 
+add_library(wire_source MODULE wire_source.cpp)
+target_link_libraries(wire_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO ${FORM_DATA_PROD_LIB_NAME})
+
 # Register experiment libraries with Phlex
 #add_library(module MODULE module.cpp)
 #target_link_libraries(module PRIVATE phlex::module my_add)
