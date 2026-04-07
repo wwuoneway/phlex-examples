@@ -25,7 +25,7 @@ PHLEX_REGISTER_ALGORITHMS(m, config)
     .filter_hits = config.get<bool>("filter_hits"),
     .long_max_hits_vec = config.get<std::vector<int>>("long_max_hits_vec"),
     .long_pulse_width_vec = config.get<std::vector<int>>("long_pulse_width_vec"),
-    .max_multi_hit = config.get<int>("max_multi_hit"),
+    .max_multi_hit = config.get<size_t>("max_multi_hit"),
     .area_method = config.get<int>("area_method"),
     .area_norms_vec = config.get<std::vector<double>>("area_norms_vec"),
     .chi2_ndf = config.get<double>("chi2_ndf"),

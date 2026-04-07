@@ -44,7 +44,7 @@ namespace examples {
 
     std::vector<int> long_max_hits_vec;    ///<Maximum number hits on a really long pulse train
     std::vector<int> long_pulse_width_vec; ///<Sets width of hits used to describe long pulses
-    int max_multi_hit; ///<maximum hits for multi fit
+    size_t max_multi_hit; ///<maximum hits for multi fit
     int area_method;     ///<Type of area calculation
     std::vector<double>
       area_norms_vec;       ///<factors for converting area to same units as peak height

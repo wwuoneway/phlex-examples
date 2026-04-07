@@ -28,8 +28,8 @@ include_directories(${ROOT_INCLUDE_DIRS})
 
 REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_def.xml)
 
-add_library(${FORM_DATA_PROD_LIB_NAME} SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp gaus_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx gaus_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
-target_link_libraries(${FORM_DATA_PROD_LIB_NAME} ROOT::Physics ROOT::EG)
+add_library(${FORM_DATA_PROD_LIB_NAME}Dict SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp gaus_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx gaus_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
+target_link_libraries(${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Physics ROOT::EG)
 
 add_compile_options(-Wall -Wpedantic -Werror)
 add_subdirectory(gaus_hit_finder)
@@ -40,15 +40,15 @@ add_library(my_add SHARED my_add.cpp)
 add_library(my_geometry SHARED my_geometry.cpp)
 
 add_library(print_mcparticles SHARED print_mcparticles.cpp)
-target_link_libraries(print_mcparticles PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(print_mcparticles PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
 
 add_library(track_cheater SHARED track_cheater.cpp)
 target_link_options(track_cheater PRIVATE "LINKER:--no-as-needed")
-target_link_libraries(track_cheater PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(track_cheater PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
 
 add_library(track_cheater_per_tpc SHARED track_cheater_per_tpc.cpp)
 target_link_options(track_cheater_per_tpc PRIVATE "LINKER:--no-as-needed")
-target_link_libraries(track_cheater_per_tpc PRIVATE ${FORM_DATA_PROD_LIB_NAME} ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(track_cheater_per_tpc PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
 
 # Register providers for data products
 add_library(numbers_source MODULE numbers_source.cpp)
@@ -61,7 +61,7 @@ add_library(mcparticle_source MODULE mcparticle_source.cpp)
 target_link_libraries(mcparticle_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO)
 
 add_library(wire_source MODULE wire_source.cpp)
-target_link_libraries(wire_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO ${FORM_DATA_PROD_LIB_NAME})
+target_link_libraries(wire_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO ${FORM_DATA_PROD_LIB_NAME}Dict)
 
 # Register experiment libraries with Phlex
 #add_library(module MODULE module.cpp)
@@ -71,11 +71,11 @@ add_library(mcparticles_module MODULE mcparticles_module.cpp)
 target_link_libraries(mcparticles_module PRIVATE phlex::module print_mcparticles)
 
 add_library(track_cheater_module MODULE track_cheater_module.cpp)
-target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME})
+target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME}Dict)
 
 #TODO: unfold registration seems to be broken because of a missing argument when it delegates to glue<>.
 #add_library(track_cheater_per_tpc_module MODULE track_cheater_per_tpc_module.cpp)
-#target_link_libraries(track_cheater_per_tpc_module PRIVATE phlex::module track_cheater_per_tpc ${FORM_DATA_PROD_LIB_NAME})
+#target_link_libraries(track_cheater_per_tpc_module PRIVATE phlex::module track_cheater_per_tpc ${FORM_DATA_PROD_LIB_NAME}Dict)
 
 add_library(add_and_verify MODULE add_and_verify.cpp)
 target_link_libraries(add_and_verify PRIVATE phlex::module my_add my_geometry)

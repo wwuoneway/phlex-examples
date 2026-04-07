@@ -2,7 +2,7 @@
   driver: {
     cpp: 'generate_layers',
     layers: {
-      event: { parent: 'job', total: 5, starting_number: 1 },
+      event: { parent: 'job', total: 99, starting_number: 0 },
     },
   },
   sources: {
@@ -63,6 +63,7 @@
     },
     output: {
       cpp: 'form_module',
+      technology: 'ROOT_RNTUPLE',
       products: ['wires', 'hits',],
     },
   },
