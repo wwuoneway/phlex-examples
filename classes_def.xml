@@ -37,6 +37,28 @@
  <class name="std::vector< lar::sparse_vector<float>::datarange_t>"/>
  <class name="lar::sparse_vector<float>"/>
 
+ <!-- geometry types from LArSoft -->
+ <enum name="geo::coordinates"/>
+ <enum name="geo::_plane_proj"/>
+ <enum name="geo::_plane_orient"/>
+ <enum name="geo::_plane_sigtype"/>
+ <enum name="geo::driftdir"/>
+
+ <class name="geo::CryostatID" ClassVersion="18">
+  <version ClassVersion="18" checksum="1964936896"/>
+ </class>
+ <class name="geo::TPCID" ClassVersion="18">
+  <version ClassVersion="18" checksum="1559344023"/>
+ </class>
+ <class name="geo::PlaneID" ClassVersion="3">
+  <version ClassVersion="3" checksum="4101905372"/>
+  <version ClassVersion="2" checksum="1305837428"/>
+ </class>
+ <class name="geo::WireID" ClassVersion="12">
+  <version ClassVersion="12" checksum="3525876646"/>
+  <version ClassVersion="11" checksum="363582492"/>
+ </class>
+
  <class name="std::vector<simb::MCParticle>"                                       />
  <class name="std::vector<simb::MCTrajectory>"                                     />
  <class name="std::vector<recob::Hit>"                                             />
