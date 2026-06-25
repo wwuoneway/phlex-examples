@@ -29,5 +29,5 @@ PHLEX_REGISTER_PROVIDERS(m, config)
   auto const art_file_name = config.get<std::string>("art_file_name");
 
   auto part_maker = m.make<wrapper<ArtReader<recob::Wire>>>(art_file_name, "recob::Wires_" + art_module + "_" + art_label + "_" + art_job + ".obj");
-  part_maker.provide("provide_wires", &wrapper<ArtReader<recob::Wire>>::phlex_callback).output_product("provide_wires", "wires", "event");
+  part_maker.provide("provide_wires", &wrapper<ArtReader<recob::Wire>>::phlex_callback).output_product("wires", "", "event");
 }
