@@ -94,3 +94,6 @@ target_link_libraries(split_square_verify PRIVATE phlex::module)
 
 # Enable asserts for split_square_verify
 target_compile_options(split_square_verify PRIVATE -UNDEBUG)
+
+add_library(form_source_test_types MODULE form_source_test_types.cpp)
+target_link_libraries(form_source_test_types PRIVATE phlex::module form)
