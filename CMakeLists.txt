@@ -31,6 +31,8 @@ REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_d
 add_library(${FORM_DATA_PROD_LIB_NAME}Dict SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp gaus_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx gaus_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
 target_link_libraries(${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Physics ROOT::EG)
 
+add_subdirectory(migration)
+
 add_compile_options(-Wall -Wpedantic -Werror)
 add_subdirectory(gaus_hit_finder)
 
@@ -83,3 +85,13 @@ target_link_libraries(add_and_verify PRIVATE phlex::module my_add my_geometry)
 # Enable asserts for add_and_verify
 # N.B. This should not be done for production code, but it is useful for testing and development.
 target_compile_options(add_and_verify PRIVATE -UNDEBUG)
+
+# Unfold example: vector<int> on parent layer -> int on child layer
+add_library(vector_source MODULE vector_source.cpp)
+target_link_libraries(vector_source PRIVATE phlex::module)
+
+add_library(split_square_verify MODULE split_square_verify.cpp)
+target_link_libraries(split_square_verify PRIVATE phlex::module)
+
+# Enable asserts for split_square_verify
+target_compile_options(split_square_verify PRIVATE -UNDEBUG)
