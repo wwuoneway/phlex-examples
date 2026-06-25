@@ -28,13 +28,12 @@ include_directories(${ROOT_INCLUDE_DIRS})
 
 REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_def.xml)
 
-add_library(${FORM_DATA_PROD_LIB_NAME}Dict SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp gaus_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx gaus_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
+add_library(${FORM_DATA_PROD_LIB_NAME}Dict SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
 target_link_libraries(${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Physics ROOT::EG)
 
 add_subdirectory(migration)
 
 add_compile_options(-Wall -Wpedantic -Werror)
-add_subdirectory(gaus_hit_finder)
 
 # Proxies for framework-agnostic experiment libraries
 # N.B. The specified library type should be SHARED.

@@ -29,5 +29,5 @@ PHLEX_REGISTER_PROVIDERS(m, config)
   auto const art_file_name = config.get<std::string>("art_file_name");
 
   auto part_maker = m.make<wrapper<ArtReader<simb::MCParticle>>>(art_file_name, "simb::MCParticles_" + art_module + "_" + art_label + "_" + art_job + ".obj");
-  part_maker.provide("read_mcparticles", &wrapper<ArtReader<simb::MCParticle>>::phlex_callback).output_product(product_query{.creator = "read_mcparticles", .layer = "event", .suffix = "largeant"});
+  part_maker.provide("read_mcparticles", &wrapper<ArtReader<simb::MCParticle>>::phlex_callback).output_product("read_mcparticles", "largeant", "event");
 }
