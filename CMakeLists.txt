@@ -71,6 +71,9 @@ target_link_libraries(wire_source PRIVATE phlex::module ROOT::Core ROOT::Tree RO
 add_library(mcparticles_module MODULE mcparticles_module.cpp)
 target_link_libraries(mcparticles_module PRIVATE phlex::module print_mcparticles)
 
+add_library(mcparticles_form_readback_module MODULE mcparticles_form_readback_module.cpp)
+target_link_libraries(mcparticles_form_readback_module PRIVATE phlex::module print_mcparticles)
+
 add_library(track_cheater_module MODULE track_cheater_module.cpp)
 target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME}Dict)
 
@@ -97,7 +100,27 @@ target_compile_options(split_square_verify PRIVATE -UNDEBUG)
 
 add_library(form_source_test_types MODULE form_source_test_types.cpp)
 if(TARGET phlex::form)
-  target_link_libraries(form_source_test_types PRIVATE phlex::module phlex::form)
+  target_link_libraries(
+    form_source_test_types
+    PRIVATE
+      phlex::module
+      phlex::form
+      ${FORM_DATA_PROD_LIB_NAME}Dict
+      ROOT::Core
+      ROOT::Physics
+      ROOT::EG
+      ROOT::RIO
+  )
 else()
-  target_link_libraries(form_source_test_types PRIVATE phlex::module form)
+  target_link_libraries(
+    form_source_test_types
+    PRIVATE
+      phlex::module
+      form
+      ${FORM_DATA_PROD_LIB_NAME}Dict
+      ROOT::Core
+      ROOT::Physics
+      ROOT::EG
+      ROOT::RIO
+  )
 endif()
