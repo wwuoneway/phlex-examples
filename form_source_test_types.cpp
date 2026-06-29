@@ -1,6 +1,6 @@
-#include "phlex/module.hpp"
 #include "MCParticle.h"
-#include "form/form/form_source_type_registry.hpp"
+#include "phlex/form/form_source_type_registry.hpp"
+#include "phlex/module.hpp"
 
 using namespace phlex;
 
@@ -14,7 +14,8 @@ namespace {
 
     // Example extension point: these types are not in the built-in registry.
     // Users can add their custom types here as needed.
-    form::experimental::register_form_vector_product_type<simb::MCParticle>("std::vector<simb::MCParticle>");
+    form::experimental::register_form_vector_product_type<simb::MCParticle>(
+      "std::vector<simb::MCParticle>");
 
     registered = true;
   }

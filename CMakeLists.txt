@@ -4,31 +4,95 @@ project(my_phlex_example VERSION 0.0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "14.1")
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "15")
-      add_compile_options(-Wno-stringop-overflow)
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "14.1")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "15")
+            add_compile_options(-Wno-stringop-overflow)
+        endif()
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "16")
+            add_compile_options(-Wno-array-bounds)
+        endif()
     endif()
-    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "16")
-      add_compile_options(-Wno-array-bounds)
-    endif()
-  endif()
 endif()
 
 find_package(Boost REQUIRED json)
 find_package(TBB REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(phlex REQUIRED)
-find_package(ROOT REQUIRED COMPONENTS Physics EG Core RIO Tree TreePlayer)
+find_package(
+    ROOT
+    REQUIRED
+    COMPONENTS Physics EG Core RIO Tree TreePlayer
+)
+
+# Some Spack environment views can be incomplete and miss
+# include/phlex/model/layer_path.hpp. Keep this package independent by
+# falling back to the installed phlex prefix include directory.
+get_target_property(
+    PHLEX_MODULE_INCLUDE_DIRS
+    phlex::module
+    INTERFACE_INCLUDE_DIRECTORIES
+)
+set(PHLEX_HAS_LAYER_PATH_IN_INTERFACE FALSE)
+if(PHLEX_MODULE_INCLUDE_DIRS)
+    foreach(_inc IN LISTS PHLEX_MODULE_INCLUDE_DIRS)
+        if(EXISTS "${_inc}/phlex/model/layer_path.hpp")
+            set(PHLEX_HAS_LAYER_PATH_IN_INTERFACE TRUE)
+            break()
+        endif()
+    endforeach()
+endif()
+
+if(NOT PHLEX_HAS_LAYER_PATH_IN_INTERFACE)
+    get_target_property(PHLEX_MODEL_LIB phlex::model IMPORTED_LOCATION_RELEASE)
+    if(NOT PHLEX_MODEL_LIB)
+        get_target_property(PHLEX_MODEL_LIB phlex::model IMPORTED_LOCATION)
+    endif()
+
+    if(PHLEX_MODEL_LIB)
+        get_filename_component(
+            PHLEX_MODEL_LIB_REAL
+            "${PHLEX_MODEL_LIB}"
+            REALPATH
+        )
+        get_filename_component(
+            PHLEX_LIB_DIR
+            "${PHLEX_MODEL_LIB_REAL}"
+            DIRECTORY
+        )
+        get_filename_component(PHLEX_PREFIX "${PHLEX_LIB_DIR}" DIRECTORY)
+        set(PHLEX_PREFIX_INCLUDE_DIR "${PHLEX_PREFIX}/include")
+        if(EXISTS "${PHLEX_PREFIX_INCLUDE_DIR}/phlex/model/layer_path.hpp")
+            message(
+                WARNING
+                "phlex interface include dirs are missing layer_path.hpp; adding ${PHLEX_PREFIX_INCLUDE_DIR}"
+            )
+            include_directories(BEFORE "${PHLEX_PREFIX_INCLUDE_DIR}")
+        endif()
+    endif()
+endif()
 
 # Register data product with ROOT so TTreeReader can read it
 set(FORM_DATA_PROD_LIB_NAME "form_test_data_products")
-find_package(ROOT REQUIRED COMPONENTS Physics EG Core RIO Tree TreePlayer)
+find_package(
+    ROOT
+    REQUIRED
+    COMPONENTS Physics EG Core RIO Tree TreePlayer
+)
 
 include_directories(${ROOT_INCLUDE_DIRS})
 
-REFLEX_GENERATE_DICTIONARY(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_def.xml)
+reflex_generate_dictionary(${FORM_DATA_PROD_LIB_NAME} dict.h SELECTION classes_def.xml)
 
-add_library(${FORM_DATA_PROD_LIB_NAME}Dict SHARED ${FORM_DATA_PROD_LIB_NAME}.cxx MCParticle.cxx MCTrajectory.cxx track.cpp migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx)
+add_library(
+    ${FORM_DATA_PROD_LIB_NAME}Dict
+    SHARED
+    ${FORM_DATA_PROD_LIB_NAME}.cxx
+    MCParticle.cxx
+    MCTrajectory.cxx
+    track.cpp
+    migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Wire.cxx
+    migration/gauss_hit_finder/copied_from_larsoft_minor_edits/Hit.cxx
+)
 target_link_libraries(${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Physics ROOT::EG)
 
 add_subdirectory(migration)
@@ -41,15 +105,39 @@ add_library(my_add SHARED my_add.cpp)
 add_library(my_geometry SHARED my_geometry.cpp)
 
 add_library(print_mcparticles SHARED print_mcparticles.cpp)
-target_link_libraries(print_mcparticles PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(
+    print_mcparticles
+    PRIVATE
+        ${FORM_DATA_PROD_LIB_NAME}Dict
+        ROOT::Core
+        ROOT::Physics
+        ROOT::EG
+        ROOT::RIO
+)
 
 add_library(track_cheater SHARED track_cheater.cpp)
 target_link_options(track_cheater PRIVATE "LINKER:--no-as-needed")
-target_link_libraries(track_cheater PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(
+    track_cheater
+    PRIVATE
+        ${FORM_DATA_PROD_LIB_NAME}Dict
+        ROOT::Core
+        ROOT::Physics
+        ROOT::EG
+        ROOT::RIO
+)
 
 add_library(track_cheater_per_tpc SHARED track_cheater_per_tpc.cpp)
 target_link_options(track_cheater_per_tpc PRIVATE "LINKER:--no-as-needed")
-target_link_libraries(track_cheater_per_tpc PRIVATE ${FORM_DATA_PROD_LIB_NAME}Dict ROOT::Core ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(
+    track_cheater_per_tpc
+    PRIVATE
+        ${FORM_DATA_PROD_LIB_NAME}Dict
+        ROOT::Core
+        ROOT::Physics
+        ROOT::EG
+        ROOT::RIO
+)
 
 # Register providers for data products
 add_library(numbers_source MODULE numbers_source.cpp)
@@ -59,23 +147,57 @@ add_library(geometry_source MODULE geometry_source.cpp)
 target_link_libraries(geometry_source PRIVATE phlex::module my_geometry)
 
 add_library(mcparticle_source MODULE mcparticle_source.cpp)
-target_link_libraries(mcparticle_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO)
+target_link_libraries(
+    mcparticle_source
+    PRIVATE
+        phlex::module
+        ROOT::Core
+        ROOT::Tree
+        ROOT::TreePlayer
+        ROOT::Physics
+        ROOT::EG
+        ROOT::RIO
+)
 
 add_library(wire_source MODULE wire_source.cpp)
-target_link_libraries(wire_source PRIVATE phlex::module ROOT::Core ROOT::Tree ROOT::TreePlayer ROOT::Physics ROOT::EG ROOT::RIO ${FORM_DATA_PROD_LIB_NAME}Dict)
+target_link_libraries(
+    wire_source
+    PRIVATE
+        phlex::module
+        ROOT::Core
+        ROOT::Tree
+        ROOT::TreePlayer
+        ROOT::Physics
+        ROOT::EG
+        ROOT::RIO
+        ${FORM_DATA_PROD_LIB_NAME}Dict
+)
 
 # Register experiment libraries with Phlex
 #add_library(module MODULE module.cpp)
 #target_link_libraries(module PRIVATE phlex::module my_add)
 
 add_library(mcparticles_module MODULE mcparticles_module.cpp)
-target_link_libraries(mcparticles_module PRIVATE phlex::module print_mcparticles)
+target_link_libraries(
+    mcparticles_module
+    PRIVATE phlex::module print_mcparticles
+)
 
-add_library(mcparticles_form_readback_module MODULE mcparticles_form_readback_module.cpp)
-target_link_libraries(mcparticles_form_readback_module PRIVATE phlex::module print_mcparticles)
+add_library(
+    mcparticles_form_readback_module
+    MODULE
+    mcparticles_form_readback_module.cpp
+)
+target_link_libraries(
+    mcparticles_form_readback_module
+    PRIVATE phlex::module print_mcparticles
+)
 
 add_library(track_cheater_module MODULE track_cheater_module.cpp)
-target_link_libraries(track_cheater_module PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME}Dict)
+target_link_libraries(
+    track_cheater_module
+    PRIVATE phlex::module track_cheater ${FORM_DATA_PROD_LIB_NAME}Dict
+)
 
 #TODO: unfold registration seems to be broken because of a missing argument when it delegates to glue<>.
 #add_library(track_cheater_per_tpc_module MODULE track_cheater_per_tpc_module.cpp)
@@ -100,27 +222,27 @@ target_compile_options(split_square_verify PRIVATE -UNDEBUG)
 
 add_library(form_source_test_types MODULE form_source_test_types.cpp)
 if(TARGET phlex::form)
-  target_link_libraries(
-    form_source_test_types
-    PRIVATE
-      phlex::module
-      phlex::form
-      ${FORM_DATA_PROD_LIB_NAME}Dict
-      ROOT::Core
-      ROOT::Physics
-      ROOT::EG
-      ROOT::RIO
-  )
+    target_link_libraries(
+        form_source_test_types
+        PRIVATE
+            phlex::module
+            phlex::form
+            ${FORM_DATA_PROD_LIB_NAME}Dict
+            ROOT::Core
+            ROOT::Physics
+            ROOT::EG
+            ROOT::RIO
+    )
 else()
-  target_link_libraries(
-    form_source_test_types
-    PRIVATE
-      phlex::module
-      form
-      ${FORM_DATA_PROD_LIB_NAME}Dict
-      ROOT::Core
-      ROOT::Physics
-      ROOT::EG
-      ROOT::RIO
-  )
+    target_link_libraries(
+        form_source_test_types
+        PRIVATE
+            phlex::module
+            form
+            ${FORM_DATA_PROD_LIB_NAME}Dict
+            ROOT::Core
+            ROOT::Physics
+            ROOT::EG
+            ROOT::RIO
+    )
 endif()
